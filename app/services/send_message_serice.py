@@ -5,27 +5,25 @@ from twilio.rest import Client
 import os
 from dotenv import load_dotenv
 
+from app.core.config import ACCOUNT_SID, AUTH_TOKEN, CLIENT_PHONE
 
-load_dotenv()
+
 def send_otp_sms(phone_number: str,otp: str) -> bool:
     try:
-        account_sid = os.getenv("TWILIO_ACCOUNT_SID")
-        auth_token = os.getenv("TWILIO_AUTH_TOKEN")
-        client_phone = os.getenv("TWILIO_PHONE_NUMBER")
-
-        if not all([account_sid, auth_token, client_phone]):
+        
+        if not all([ACCOUNT_SID, AUTH_TOKEN, CLIENT_PHONE]):
             raise ValueError("Missing Twilio credentials in environment variables.")
         
-        client = Client(account_sid, auth_token)
+        client = Client(ACCOUNT_SID, AUTH_TOKEN)
         
 
-        print("SID:", account_sid)
-        print("TOKEN:", auth_token)
-        print("FROM:", client_phone)
+        print("SID:", ACCOUNT_SID)
+        print("TOKEN:", AUTH_TOKEN)
+        print("FROM:", CLIENT_PHONE)
 
         message = client.messages.create(
         body=f"Your OTP is {otp}. Do not share it with anyone.",
-        from_=client_phone,
+        from_=CLIENT_PHONE,
         to=phone_number,
         )
         print(f"OTP {otp} sent to {phone_number}")
